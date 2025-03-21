@@ -28,9 +28,9 @@ def get_links(url):
   response = ""
   links = []
   if (fhand):
-      for l in fhand:
-        response += l.decode()
-        links += re.findall(r"http[^\"\']+", response)
+      for line in fhand:
+        response += line.decode()
+      links = re.findall(r"http[^\"\']+", response)
       return links
 
 
@@ -40,24 +40,31 @@ def get_urllib(url):
   links = set(links)
 
   for link in links:
-    fhand = urllib.request.urlopen(url)
-    response = ""
-    li = link.split("/")
-    filename = li[len(li)-1]
+      li = link.split("/")
+      filename = li[len(li)-1]
 
-    for line in fhand:
-      response += line.decode()
-    if (filename):
-      print(f"Saving file from {link}")
-      extension = str(re.findall("\.\S+",filename))
-      if(extension == "com" or extension == None):
-        with open(f"scraper/{filename}.html", "+a") as file:
-          file.write(response)
+      try:
+        fhand = urllib.request.urlopen(link)
+      except Exception as e:
+        print(f"Wasn't able to fetch source code from {link}. Exception: {e}")
+        continue
+      response = ""
+
+      for line in fhand:
+        response += line.decode()
+      if (filename):
+        print(f"Saving file from {link}")
+        extension = re.findall("\.\S+",filename)
+        print(extension)
+        if(extension == ".com" or extension == []):
+          print(filename)
+          with open(f"scraper/{filename}.html", "+a") as file:
+            file.write(response)
+        else:
+          with open(f"scraper/{filename}", "+a") as file:
+            file.write(response)
       else:
-        with open(f"scraper/{filename}", "+a") as file:
-          file.write(response)
-    else:
-      print(f"No file to save")
+        print(f"No file to save")
 
 
 
@@ -70,7 +77,7 @@ def get_urllib(url):
 #link = response.split("/")
 #print(link[len(link)-1])
 
-resp_urllib = get_urllib("https://github.com/DrPedroEmanuel/R-Anthropic-Assistant/blob/main/README.md")
+resp_urllib = get_urllib("https://medstatswithpedro.com")
 #mylinks = get_links("https://github.com/DrPedroEmanuel/R-Anthropic-Assistant/blob/main/README.md")
 #print(mylinks)
 # with open ("gh_readme.html", "+a") as file:
