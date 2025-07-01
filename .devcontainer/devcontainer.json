@@ -12,7 +12,7 @@
 			"pnpmVersion": "8.8.0",
 			"nvmVersion": "0.39"
 		},
-		"ghcr.io/devcontainers/features/nvidia-cuda:1": {
+		"ghcr.io/devcontainers/features/nvidia-cuda:2": {
 			"installToolkit": true,
 			"cudaVersion": "12.5",
 			"cudnnVersion": "9.4.0.58"
